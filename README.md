@@ -1,10 +1,47 @@
 # Substrate Node Template
 
-A fresh FRAME-based [Substrate](https://www.substrate.io/) node, ready for hacking :rocket:
+This is a fork of the substrate-node-template repo where `pallet-template` has been modified to store and increment integers on the blockchain
+
 
 ## Getting Started
 
-Follow these steps to get started with the Node Template :hammer_and_wrench:
+# Installing
+NOTE: consider deleting ./rust-toolchain if you are not running on macOS/darwin. I used this workaround to get past build errors
+From git root:
+1. build substrate template:
+`make init && make build`
+2. build front-end:
+`./deploy_front_end.sh install`
+
+
+# Running:
+1. running the blockchain:
+`./target/release/node-template --dev --tmp`
+2. running the front-end:
+`./deploy_front_end.sh start`
+
+
+# Interacting:
+once the react app has started:
+all interaction should be under the templateModule extrinsic
+1. `setValue` extrinsic must be called first to seed an initial integer value tied to the given account
+2. `switchState` takes u32 inputs with 0,1,2 being valid mappings to the enum values below:
+```rust
+pub enum State {
+	/// Will no-op on execution
+	#[codec(index = 0)]
+	IDLE,
+	/// Will increment integer value by 1 when executed
+	#[codec(index = 1)]
+	INCREASING,
+	/// Will decrement integer value by 1 when executed
+	#[codec(index = 2)]
+	DECREASING,
+}
+```
+
+NOTE: since a `match u32` arm was used in `switch_state` the codec derive lines are purely pricey documentation
+ 
 
 ### Rust Setup
 
